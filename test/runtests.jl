@@ -44,24 +44,25 @@ using Test
         notify(hook"test")
         @test !run1
         @test !run2
+        reset(hook"test")
     end
 
     @testset "Reverse order registration" begin
         run1 = false
         run2 = false
-        notify(hook"test")
+        notify(hook"foobar")
 
-        handle(hook"test") do
+        handle(hook"foobar") do
             run1 = true
         end
 
-        handle(hook"test") do
+        handle(hook"foobar") do
             run2 = true
         end
 
         @test run1
         @test run2
-        reset(hook"test")
+        reset(hook"foobar")
     end
 
     @testset "Deregistration" begin
@@ -104,6 +105,10 @@ using Test
 
     @testset "Errors on resettinging nonexistent hook" begin
         @test_throws ErrorException reset(hook"does-not-exist")
+    end
+
+    @testset "Errors on unhandling nonexistent hook" begin
+        @test_throws ErrorException unhandle(()->100, hook"does-not-exist")
     end
 
     @testset "Errors on unhandling nonexistent handler" begin
