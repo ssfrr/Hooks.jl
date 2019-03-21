@@ -12,6 +12,11 @@ end
 
 @inline Hook(args...) = Hook(Set{Any}(args), false, ())
 
+"""
+    hook"some-event"
+
+String macro to represent the name of a hook.
+"""
 macro hook_str(name)
     :(HookName{Symbol($name)}())
 end
